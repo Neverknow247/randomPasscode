@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using randomPasscode.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace randomPasscode.Controllers
 {
@@ -18,9 +19,25 @@ namespace randomPasscode.Controllers
             _logger = logger;
         }
 
+        [HttpGet("")]
         public IActionResult Index()
         {
+            if(HttpContext.Session.GetInt32("Count") == null)
+            {
+                HttpContext.Session.SetInt32("Count",1);
+            }
+            int? count = HttpContext.Session.GetInt32("Count");
+            ViewBag.Count = count;
             return View();
+        }
+
+        [HttpGet("Generate")]
+        public IActionResult Generate()
+        {
+            int? count = HttpContext.Session.GetInt32("Count");
+            count ++;
+            HttpContext.Session.SetInt32("Count",(int)count);
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()
