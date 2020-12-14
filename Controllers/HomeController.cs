@@ -27,7 +27,20 @@ namespace randomPasscode.Controllers
                 HttpContext.Session.SetInt32("Count",1);
             }
             int? count = HttpContext.Session.GetInt32("Count");
+            string random = "";
+            string number = "0123456789";
+            string letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Random rand = new Random();
+            while(random.Length < 14){
+                if(rand.Next(1,3)%2 == 0){
+                    random+=number[rand.Next(0,10)];
+                }
+                else{
+                    random+=letter[rand.Next(0,26)];
+                }
+            }
             ViewBag.Count = count;
+            ViewBag.Random = random;
             return View();
         }
 
